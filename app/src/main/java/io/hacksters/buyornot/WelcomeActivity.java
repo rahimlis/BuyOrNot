@@ -1,5 +1,6 @@
 package io.hacksters.buyornot;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -10,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -27,11 +30,26 @@ public class WelcomeActivity extends AppCompatActivity {
     private static final String TAG = "WelcomeActivity";
     private static final String FB_TOKEN = "FB_TOKEN";
     private  CallbackManager callbackManager;
+
+    // change this
+    private Button button;
+    private Context context;
+    // change this
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         FacebookSdk.sdkInitialize(getApplicationContext());
+
+        context=this;
+        button = (Button) findViewById(R.id.post);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context,ActivityPostImage.class);
+                startActivity(intent);
+            }
+        });
 
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
