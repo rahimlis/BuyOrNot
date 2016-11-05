@@ -1,4 +1,4 @@
-package io.hacksters.buyornot;
+package io.hacksters.buyornot.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -7,7 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-public class ActivityLikersUnlikers extends AppCompatActivity {
+import io.hacksters.buyornot.R;
+
+public class LikersActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

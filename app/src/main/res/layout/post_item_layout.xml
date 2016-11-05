@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     app:cardElevation="3dp"
     app:cardUseCompatPadding="true"
+    android:layout_margin="5dp"
     app:cardBackgroundColor="@color/white"
     android:foreground="?android:attr/selectableItemBackground"
     app:cardCornerRadius="3dp">
@@ -13,20 +14,22 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/friends_post_image"
-            android:layout_width="match_parent"
-            android:layout_height="250dp" />
         <TextView
-            android:layout_below="@+id/friends_post_image"
             android:id="@+id/friends_post_name"
+            android:layout_alignParentStart="true"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:text="Rahim Rahimli"
+            android:padding="5dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/blue"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:layout_alignParentLeft="true" />
 
         <LinearLayout
             android:id="@+id/friends_likes_and_unlikes"
-            android:layout_below="@+id/friends_post_name"
+            android:layout_below="@+id/friends_post_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -35,12 +38,16 @@
                 android:id="@+id/friends_post_likes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="120"
+                android:textColor="@color/green"
                 android:layout_weight="1"/>
 
 
             <TextView
                 android:id="@+id/friends_post_unlikes"
                 android:layout_width="match_parent"
+                android:text="140"
+                android:textColor="@color/red"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"/>
 
@@ -52,21 +59,38 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageButton
+            <TextView
+                android:text="BUY"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:background="@color/green"
+                android:textColor="@color/white"
+                android:textAlignment="center"
                 android:id="@+id/friends_post_like"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"/>
 
-
-            <ImageButton
+            <TextView
                 android:id="@+id/friends_post_unlike"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="NOT"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:background="@color/red"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+
                 android:layout_weight="1"/>
 
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/friends_post_image"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_below="@id/friends_post_name" />
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

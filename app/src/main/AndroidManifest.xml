@@ -31,21 +31,31 @@
         </provider>
 
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.CompareActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".WelcomeActivity">
+        <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ActivityPostImage" />
-        <activity android:name=".ActivityFBFriendsImagePosts" />
+        <activity android:name=".activities.PostImageActivity" />
+        <activity android:name=".activities.PostsActivity" />
         <activity
-            android:name=".ActivityLikersUnlikers"
+            android:name=".activities.LikersActivity"
             android:label="@string/title_activity_likers_unlikers"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

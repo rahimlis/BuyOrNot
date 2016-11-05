@@ -1,4 +1,4 @@
-package io.hacksters.buyornot;
+package io.hacksters.buyornot.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -23,11 +24,12 @@ import com.facebook.login.widget.LoginButton;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
-public class WelcomeActivity extends AppCompatActivity {
+import io.hacksters.buyornot.R;
 
-    private static final String TAG = "WelcomeActivity";
+public class LoginActivity extends AppCompatActivity {
+
+    private static final String TAG = "LoginActivity";
     private static final String FB_TOKEN = "FB_TOKEN";
     private  CallbackManager callbackManager;
 
@@ -38,15 +40,16 @@ public class WelcomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_welcome);
+        setContentView(R.layout.activity_login);
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         context=this;
         button = (Button) findViewById(R.id.post);
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context,ActivityPostImage.class);
+                Intent intent = new Intent(context,PostImageActivity.class);
                 startActivity(intent);
             }
         });
@@ -68,16 +71,14 @@ public class WelcomeActivity extends AppCompatActivity {
 
         callbackManager = CallbackManager.Factory.create();
         final LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
-
         loginButton.setReadPermissions("user_friends","user_photos");
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG,loginResult.getAccessToken().getToken());
-                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(WelcomeActivity.this);
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
                 sp.edit().putString(FB_TOKEN,loginResult.getAccessToken().getToken()).apply();
-                Intent intent = new Intent(WelcomeActivity.this,MainActivity.class);
+                Intent intent = new Intent(LoginActivity.this,CompareActivity.class);
                 startActivity(intent);;
                 finish();
             }
@@ -92,8 +93,16 @@ public class WelcomeActivity extends AppCompatActivity {
                 Log.d(TAG,"error "+error);
             }
         });
+        if(isLoggedIn()) {
+            Intent intent = new Intent(this,CompareActivity.class);
+            startActivity(intent);
+        }
     }
 
+    public boolean isLoggedIn() {
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        return accessToken != null;
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

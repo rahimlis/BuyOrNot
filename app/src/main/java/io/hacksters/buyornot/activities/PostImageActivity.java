@@ -1,14 +1,11 @@
-package io.hacksters.buyornot;
+package io.hacksters.buyornot.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +15,9 @@ import android.widget.ImageView;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class ActivityPostImage extends AppCompatActivity {
+import io.hacksters.buyornot.R;
+
+public class PostImageActivity extends AppCompatActivity {
 
     private final static int REQUEST_IMAGE_CAPTURE = 1982;
     private final static int PICK_IMAGE_REQUEST = 1983;
@@ -51,7 +50,7 @@ public class ActivityPostImage extends AppCompatActivity {
     private void selectImage() {
         final CharSequence[] items = {"Take a Photo", "Choose from Library",
                 "Cancel"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(ActivityPostImage.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(PostImageActivity.this);
         builder.setTitle("Add Photo!");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override

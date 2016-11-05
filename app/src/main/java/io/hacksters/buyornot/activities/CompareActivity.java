@@ -1,9 +1,10 @@
-package io.hacksters.buyornot;
+package io.hacksters.buyornot.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
@@ -11,18 +12,38 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.cloudinary.Cloudinary;
+import com.cloudinary.Uploader;
+import com.cloudinary.utils.ObjectUtils;
+import com.facebook.AccessToken;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+import cz.msebera.android.httpclient.Header;
+import io.hacksters.buyornot.R;
+import io.hacksters.buyornot.utils.UrlBuilder;
+
+public class CompareActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final int IMAGE_FIRST = 1;
     private static final int IMAGE_SECOND = 2;
     private static final String SHARED_PREFERENCES = "prefs";
-    private String TAG = "MainActivity";
+    private String TAG = "CompareActivity";
     private ImageView background1;
     private ImageView background2;
     private String filePath;
@@ -30,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_compare);
         setupUI();
     }
 
@@ -73,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             File photoFile = null;
             try {
                 photoFile = createImageFile(requestID);
+
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -82,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivityForResult(takePictureIntent, requestID);
             }
         }
+
     }
 
     private File createImageFile(int whichImage) throws IOException {
@@ -121,6 +144,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             String path = getFromSharedPrefs(requestCode);
+
+            UploadImageTask task = new UploadImageTask();
+            task.execute(path);
+
             if (requestCode == IMAGE_FIRST) {
                 loadImageIntoView(background1, path);
                 findViewById(R.id.imageview_add_photo_first).setVisibility(View.INVISIBLE);
@@ -155,6 +182,58 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.imageview_select_second:
                 onImageSelected();
                 break;
+        }
+    }
+
+    private void insertImageToDatabase(String imageURL, String userID) {
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get(UrlBuilder.insertImageURL(imageURL, userID), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                try {
+                    int status = response.getInt("status");
+                    if (status == 200) {
+                        Toast.makeText(CompareActivity.this, "File inserted", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(CompareActivity.this, "Error inserting file", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(CompareActivity.this, "JSON error", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    class UploadImageTask extends AsyncTask<String, Void, Map> {
+        @Override
+        protected Map doInBackground(String... paths) {
+            Map config = new HashMap();
+            config.put("cloud_name", "dvsq2ni6v");
+            config.put("api_key", "554332252326459");
+            config.put("api_secret", "4YtJFT-2YD7RldBXqWzOoV1Jd5k");
+            try {
+                InputStream inputStream = new FileInputStream(Uri.parse(paths[0]).getPath());
+                Cloudinary cloudinary = new Cloudinary(config);
+                Uploader uploader = cloudinary.uploader();
+                return uploader.upload(inputStream, ObjectUtils.emptyMap());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Map map) {
+            super.onPostExecute(map);
+            if (map != null) {
+                String imageURL = (String) map.get("url");
+                String userID = AccessToken.getCurrentAccessToken().getUserId();
+                insertImageToDatabase(imageURL, userID);
+            }
         }
     }
 }
