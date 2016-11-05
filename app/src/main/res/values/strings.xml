@@ -2,4 +2,6 @@
     <string name="app_name">BuyOrNot</string>
     <string name="facebook_app_id">1178045105609423</string>
     <string name="text_or">OR</string>
+    <string name="no_connection">No connection!</string>
+    <string name="title_activity_likers_unlikers">ActivityLikersUnlikers</string>
 </resources>

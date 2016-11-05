@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class ActivityPostImage extends AppCompatActivity {
 
@@ -86,7 +87,7 @@ public class ActivityPostImage extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode ==RESULT_OK && data != null && data.getData() != null) {
             filePath = data.getData();
             final Uri selectedImageUri=data.getData();
-            if (Build.VERSION.SDK_INT<19){
+            /*if (Build.VERSION.SDK_INT<19){
                 try {
                     //Getting the Bitmap from Gallery
                     String[] filePathColumn={MediaStore.Images.Media.DATA};
@@ -108,7 +109,7 @@ public class ActivityPostImage extends AppCompatActivity {
                         }).start();
 
                     }else {
-                        bitmap= BitmapFactory.decodeFile(imageString);
+                        bitmap= BitmapFactory.decodeFile(selectedImagePath);
                     }
                     imagePreview .setImageBitmap(bitmap);
                 } catch (Exception e) {
@@ -144,14 +145,20 @@ public class ActivityPostImage extends AppCompatActivity {
                             }
                         }).start();
                     }else {
-                        bitmap= BitmapFactory.decodeFile(imageString);
+                        bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
                     }
                     imagePreview .setImageBitmap(bitmap);
 
                 } catch (Exception e){
                     e.printStackTrace();
                 }
+            }*/
+            try{
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
+            }catch (IOException e){
+
             }
+            imagePreview.setImageBitmap(bitmap);
 
         }if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
