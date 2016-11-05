@@ -27,7 +27,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="fitXY"
-                    android:src="@drawable/example1" />
+                   />
                 <ImageView
                     android:id="@+id/imageview_add_photo_first"
                     android:layout_width="wrap_content"
@@ -48,13 +48,24 @@
                 <EditText
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="4"
+                    android:layout_weight="3"
                     android:text="550 AZN" />
 
                 <ImageView
+                    android:id="@+id/imageview_delete_first"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:src="@drawable/ic_delete"
+                    android:padding="5dp"
+                    android:tint="@color/red" />
+
+                <ImageView
+                    android:id="@+id/imageview_select_first"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="5dp"
                     android:src="@drawable/ic_check"
                     android:tint="@color/green" />
             </LinearLayout>
@@ -81,7 +92,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="fitXY"
-                    android:src="@drawable/example2" />
+                    />
 
                 <ImageView
                     android:id="@+id/imageview_add_photo_second"
@@ -104,12 +115,23 @@
                 <EditText
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="4"
+                    android:layout_weight="3"
                     android:text="450 AZN" />
 
                 <ImageView
+                    android:id="@+id/imageview_delete_second"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_delete"
+                    android:tint="@color/red" />
+
+                <ImageView
+                    android:id="@+id/imageview_select_second"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:padding="5dp"
                     android:layout_weight="1"
                     android:src="@drawable/ic_check"
                     android:tint="@color/green" />
