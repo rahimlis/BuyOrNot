@@ -21,6 +21,8 @@ import android.widget.TextView;
 
 import io.hacksters.buyornot.R;
 import io.hacksters.buyornot.controllers.SectionsPagerAdapter;
+import io.hacksters.buyornot.fragments.CompareFragment;
+import io.hacksters.buyornot.fragments.PostImageFragment;
 import io.hacksters.buyornot.fragments.PostListFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -50,8 +52,9 @@ public class MainActivity extends AppCompatActivity {
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-        // Set up the ViewPager with the sections adapter.
+        mSectionsPagerAdapter.addFragment(new PostListFragment());
+        mSectionsPagerAdapter.addFragment(new CompareFragment());
+        mSectionsPagerAdapter.addFragment(new PostImageFragment());
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 

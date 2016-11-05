@@ -4,10 +4,71 @@
     android:layout_height="match_parent"
     tools:context="io.hacksters.buyornot.fragments.PostImageFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        <LinearLayout
+            android:id="@+id/activity_post_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context="io.hacksters.buyornot.activities.PostImageActivity">
 
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="5dp"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="4">
+                        <ImageView
+                            android:id="@+id/activity_post_image_preview"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="fitXY"
+                            />
+                        <ImageView
+                            android:id="@+id/activity_post_image_choose"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="100dp"
+                            android:layout_centerInParent="true"
+                            android:clickable="true"
+                            android:src="@drawable/ic_add_photo"
+                            android:tint="@color/white"
+                            />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/activity_post_image_delet"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_delete"
+                            android:padding="5dp"
+                            android:tint="@color/red" />
+
+                        <ImageView
+                            android:id="@+id/activity_post_image_send"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:padding="5dp"
+                            android:src="@drawable/ic_check"
+                            android:tint="@color/green" />
+                    </LinearLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
 </FrameLayout>

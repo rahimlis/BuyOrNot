@@ -10,23 +10,28 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import io.hacksters.buyornot.fragments.PostListFragment;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
- * one of the sections/tabs/pages.
- */
+import io.hacksters.buyornot.fragments.PostListFragment;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+    private final List<Fragment> fragmentList=new ArrayList<>();
 
     public SectionsPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
+    public void addFragment(Fragment fragment){
+        fragmentList.add(fragment);
+
+    }
+
+
+
     @Override
     public Fragment getItem(int position) {
-        // getItem is called to instantiate the fragment for the given page.
-        // Return a PostListFragment (defined as a static inner class below).
-        return PostListFragment.newInstance(position + 1);
+        return fragmentList.get(position);
     }
 
     @Override
@@ -47,4 +52,5 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         }
         return null;
     }
+
 }
