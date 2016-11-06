@@ -13,7 +13,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.hacksters.buyornot.fragments.PostListFragment;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     private final List<Fragment> fragmentList=new ArrayList<>();
@@ -24,10 +23,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     public void addFragment(Fragment fragment){
         fragmentList.add(fragment);
-
     }
-
-
 
     @Override
     public Fragment getItem(int position) {
@@ -44,11 +40,11 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return "SECTION 1";
+                return "VOTE";
             case 1:
-                return "SECTION 2";
+                return "COMPARE";
             case 2:
-                return "SECTION 3";
+                return "UPLOAD";
         }
         return null;
     }

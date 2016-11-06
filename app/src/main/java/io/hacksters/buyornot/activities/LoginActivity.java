@@ -78,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d(TAG,loginResult.getAccessToken().getToken());
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
                 sp.edit().putString(FB_TOKEN,loginResult.getAccessToken().getToken()).apply();
-                Intent intent = new Intent(LoginActivity.this,CompareActivity.class);
+                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                 startActivity(intent);;
                 finish();
             }
@@ -94,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         if(isLoggedIn()) {
-            Intent intent = new Intent(this,CompareActivity.class);
+            Intent intent = new Intent(this,MainActivity.class);
             startActivity(intent);
         }
     }

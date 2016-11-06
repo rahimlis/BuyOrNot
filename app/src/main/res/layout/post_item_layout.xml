@@ -1,96 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardElevation="3dp"
-    app:cardUseCompatPadding="true"
     android:layout_margin="5dp"
-    app:cardBackgroundColor="@color/white"
     android:foreground="?android:attr/selectableItemBackground"
-    app:cardCornerRadius="3dp">
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="3dp"
+    app:cardElevation="3dp"
+    app:cardUseCompatPadding="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <TextView
-            android:id="@+id/friends_post_name"
-            android:layout_alignParentStart="true"
+            android:id="@+id/textview_username"
             android:layout_width="match_parent"
-            android:text="Rahim Rahimli"
-            android:padding="5dp"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/blue"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_marginBottom="3dp"
-            android:layout_alignParentLeft="true" />
+            android:padding="5dp"
+            android:text="Rahim Rahimli"
+            android:textColor="@color/blue"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/imageview_friends_post"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_below="@id/textview_username" />
 
         <LinearLayout
             android:id="@+id/friends_likes_and_unlikes"
-            android:layout_below="@+id/friends_post_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/imageview_friends_post"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/friends_post_likes"
+                android:id="@+id/textview_show_buy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="120"
-                android:textColor="@color/green"
-                android:layout_weight="1"/>
-
+                android:textColor="@color/green" />
 
             <TextView
-                android:id="@+id/friends_post_unlikes"
+                android:id="@+id/textview_show_not"
                 android:layout_width="match_parent"
-                android:text="140"
-                android:textColor="@color/red"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
-
+                android:layout_weight="1"
+                android:text="140"
+                android:textColor="@color/red" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_below="@+id/friends_likes_and_unlikes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/friends_likes_and_unlikes"
             android:orientation="horizontal">
 
             <TextView
-                android:text="BUY"
-                android:textSize="25sp"
-                android:textStyle="bold"
-                android:background="@color/green"
-                android:textColor="@color/white"
-                android:textAlignment="center"
-                android:id="@+id/friends_post_like"
+                android:id="@+id/textview_action_buy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:background="@color/green"
+                android:text="BUY"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/friends_post_unlike"
+                android:id="@+id/textview_action_not"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="NOT"
-                android:textSize="25sp"
-                android:textStyle="bold"
+                android:layout_weight="1"
                 android:background="@color/red"
-                android:textColor="@color/white"
+                android:text="NOT"
                 android:textAlignment="center"
-
-                android:layout_weight="1"/>
-
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                android:textStyle="bold" />
         </LinearLayout>
-
-        <ImageView
-            android:id="@+id/friends_post_image"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_below="@id/friends_post_name" />
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

@@ -13,4 +13,8 @@ public class UrlBuilder {
                 +"img_url="+img_url
                 +"&fb_user_id="+fb_user_id;
     }
+
+    public static String getFriendsURL(String token) {
+        return SERVER_ADRESS+"friends_images?fb_token="+token;
+    }
 }

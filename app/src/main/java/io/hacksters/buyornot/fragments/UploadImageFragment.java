@@ -19,19 +19,18 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import io.hacksters.buyornot.R;
-import io.hacksters.buyornot.activities.PostImageActivity;
 
-public class PostImageFragment extends Fragment {
+public class UploadImageFragment extends Fragment {
     private View view;
     private Context context;
 
-    public PostImageFragment() {
+    public UploadImageFragment() {
         // Required empty public constructor
     }
 
 
-    public static PostImageFragment newInstance(int sectionNumber) {
-        PostImageFragment fragment = new PostImageFragment();
+    public static UploadImageFragment newInstance() {
+        UploadImageFragment fragment = new UploadImageFragment();
         return fragment;
     }
 

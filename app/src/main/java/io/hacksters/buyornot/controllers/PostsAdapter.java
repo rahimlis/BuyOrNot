@@ -1,16 +1,10 @@
 package io.hacksters.buyornot.controllers;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,7 +12,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import io.hacksters.buyornot.activities.LikersActivity;
+import io.hacksters.buyornot.OnPostItemClicksListener;
 import io.hacksters.buyornot.R;
 import io.hacksters.buyornot.models.Post;
 
@@ -31,10 +25,11 @@ import io.hacksters.buyornot.models.Post;
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
     private List<Post> friendsPostItems;
     private Context context;
-
-    public PostsAdapter(List<Post> items,Context context) {
+    private OnPostItemClicksListener listener;
+    public PostsAdapter(List<Post> items,Context context,OnPostItemClicksListener listener) {
         this.friendsPostItems = items;
         this.context = context;
+        this.listener = listener;
     }
 
     @Override
@@ -46,12 +41,27 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+        final Post post = friendsPostItems.get(position);
+        holder.showBuy.setText(" "+ post.getBuy());
+        holder.showNot.setText(" "+ post.getNotBuy());
+        holder.username.setText( post.getName());
+        Picasso.with(context).load(post.getImageUrl()).fit().into(holder.postImage);
 
-        holder.unlikes.setText(friendsPostItems.get(position).getLikes());
-        holder.likes.setText(friendsPostItems.get(position).getUnlikes());
-        holder.name.setText(friendsPostItems.get(position).getName());
-        Picasso.with(context).load(friendsPostItems.get(position).getImageUrl()).into(holder.postImage);
+        holder.actionBuy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onBuyClick(post);
+            }
+        });
 
+        holder.actionNot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onNotClick(post);
+            }
+        });
+
+        /*
         holder.likes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,7 +70,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 if (networkInfo != null && networkInfo.isConnected()) {
                     Context context = v.getContext();
                     Intent intent = new Intent(context, LikersActivity.class);
-                    intent.putExtra("post_id", friendsPostItems.get(position).getPostId());
+                //    intent.putExtra("post_id", friendsPostItems.get(position).getPostId());
                     intent.putExtra("likes", true);
                     context.startActivity(intent);
                 } else {
@@ -81,7 +91,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 if (networkInfo != null && networkInfo.isConnected()) {
                     Context context = v.getContext();
                     Intent intent = new Intent(context, LikersActivity.class);
-                    intent.putExtra("post_id", friendsPostItems.get(position).getPostId());
+                  //  intent.putExtra("post_id", friendsPostItems.get(position).getPostId());
                     intent.putExtra("likes", false);
                     context.startActivity(intent);
                 } else {
@@ -91,7 +101,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     snackbar.show();
                 }
             }
-        });
+        });*/
     }
 
     @Override
@@ -102,22 +112,21 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     class ViewHolder extends RecyclerView.ViewHolder {
         final View mView;
         final ImageView postImage;
-        final TextView name;
-        final TextView likes;
-        final TextView unlikes;
-        final ImageButton like;
-        final ImageButton unlike;
-            /*public DummyContent.DummyItem mItem;*/
+        final TextView actionBuy;
+        final TextView username;
+        final TextView actionNot;
+        final TextView showBuy;
+        final TextView showNot;
 
         ViewHolder(View view) {
             super(view);
             mView = view;
-            postImage = (ImageView) view.findViewById(R.id.friends_post_image);
-            name = (TextView) view.findViewById(R.id.friends_post_name);
-            likes = (TextView) view.findViewById(R.id.friends_post_likes);
-            unlikes = (TextView) view.findViewById(R.id.friends_post_unlikes);
-            like = (ImageButton) view.findViewById(R.id.friends_post_like);
-            unlike = (ImageButton) view.findViewById(R.id.friends_post_unlike);
+            postImage = (ImageView) view.findViewById(R.id.imageview_friends_post);
+            username = (TextView) view.findViewById(R.id.textview_username);
+            actionBuy = (TextView) view.findViewById(R.id.textview_action_buy);
+            actionNot = (TextView) view.findViewById(R.id.textview_action_not);
+            showBuy = (TextView) view.findViewById(R.id.textview_show_buy);
+            showNot = (TextView) view.findViewById(R.id.textview_show_not);
         }
     }
 }

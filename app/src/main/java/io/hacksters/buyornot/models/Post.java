@@ -13,17 +13,19 @@ import java.util.List;
 
 public class Post {
     private String imageUrl;
-    private String likes;
-    private String unlikes;
-    private String name;
-    private String postId;
+    private int buy;
+    private int notBuy;
+    private String username;
+    private int id;
+    private String userID;
 
-    public Post(String imageUrl, String likes, String unlikes, String name, String postId) {
+    public Post(int id, String imageUrl, int buy, int notBuy, String username, String userID) {
         this.imageUrl = imageUrl;
-        this.likes = likes;
-        this.unlikes = unlikes;
-        this.name = name;
-        this.postId = postId;
+        this.buy = buy;
+        this.notBuy = notBuy;
+        this.username = username;
+        this.id = id;
+        this.userID = userID;
     }
 
     public String getImageUrl() {
@@ -34,62 +36,59 @@ public class Post {
         this.imageUrl = imageUrl;
     }
 
-    public String getLikes() {
-        return likes;
+    public int getBuy() {
+        return buy;
     }
 
-    public void setLikes(String likes) {
-        this.likes = likes;
+    public void setBuy(int buy) {
+        this.buy = buy;
     }
 
-    public String getUnlikes() {
-        return unlikes;
+    public int getNotBuy() {
+        return notBuy;
     }
 
-    public void setUnlikes(String unlikes) {
-        this.unlikes = unlikes;
+    public void setNotBuy(int notBuy) {
+        this.notBuy = notBuy;
     }
 
     public String getName() {
-        return name;
+        return username;
     }
 
     public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPostId() {
-        return postId;
-    }
-
-    public void setPostId(String postId) {
-        this.postId = postId;
+        this.username = name;
     }
 
 
-    public static List<Post> JSONParse(String result){
-        List<Post> friendsPostItemList = new ArrayList<>();
-        Post post = null;
-        try{
-            JSONArray jsonArray = new JSONArray(result);
-            for (int i=0;i<jsonArray.length();i++){
-                JSONObject jsonObject = new JSONArray().getJSONObject(i);
-                String name = jsonObject.getString("name");
-                String imageUrl = jsonObject.getString("image_url");
-                String likes = jsonObject.getString("likes");
-                String unlikes  =jsonObject.getString("unlikes");
-                String postId = jsonObject.getString("post_id");
-
-                post.setPostId(postId);
-                post.setImageUrl(imageUrl);
-                post.setLikes(likes);
-                post.setUnlikes(unlikes);
-                post.setName(name);
-                friendsPostItemList.add(post);
-            }
-        }catch (JSONException i){
-
+    private static Post getFromJSON(JSONObject postJSON, String username) {
+        try {
+            int id = postJSON.getInt("id");
+            String userID = postJSON.getString("fb_user_id");
+            String imgURL = postJSON.getString("img_url");
+            int buy = postJSON.getInt("buy");
+            int notBuy = postJSON.getInt("not_buy");
+            return new Post(id, imgURL, buy, notBuy, username, userID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
         }
-        return friendsPostItemList;
+    }
+
+    public static List<Post> parseJSON(JSONArray users) {
+        List<Post> posts = new ArrayList<>();
+        try {
+            for (int i = 0; i < users.length(); i++) {
+                JSONObject user = users.getJSONObject(i);
+                JSONArray images = user.getJSONArray("images");
+                String userName = user.getString("name");
+                for (int j = 0; j < images.length(); j++)
+                    posts.add(getFromJSON(images.getJSONObject(j), userName));
+            }
+            return posts;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

@@ -1,28 +1,19 @@
 package io.hacksters.buyornot.activities;
 
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-
-import android.widget.TextView;
 
 import io.hacksters.buyornot.R;
 import io.hacksters.buyornot.controllers.SectionsPagerAdapter;
 import io.hacksters.buyornot.fragments.CompareFragment;
-import io.hacksters.buyornot.fragments.PostImageFragment;
+import io.hacksters.buyornot.fragments.UploadImageFragment;
 import io.hacksters.buyornot.fragments.PostListFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -52,24 +43,13 @@ public class MainActivity extends AppCompatActivity {
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mSectionsPagerAdapter.addFragment(new PostListFragment());
-        mSectionsPagerAdapter.addFragment(new CompareFragment());
-        mSectionsPagerAdapter.addFragment(new PostImageFragment());
+        mSectionsPagerAdapter.addFragment(PostListFragment.newInstance());
+        mSectionsPagerAdapter.addFragment(CompareFragment.newInstance());
+        mSectionsPagerAdapter.addFragment(UploadImageFragment.newInstance());
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
     }
 
 
