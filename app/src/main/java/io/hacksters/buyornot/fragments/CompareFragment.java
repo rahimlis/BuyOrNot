@@ -112,6 +112,7 @@ public class CompareFragment extends Fragment implements View.OnClickListener {
         try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.parse(path));
             bitmap = BitmapUtils.getResizedBitmap(bitmap, 640);
+            if(bitmap!=null)
             imageView.setImageBitmap(bitmap);
         } catch (IOException e) {
             e.printStackTrace();

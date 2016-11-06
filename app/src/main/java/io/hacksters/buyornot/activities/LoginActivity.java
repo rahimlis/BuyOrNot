@@ -41,18 +41,20 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        getSupportActionBar().hide();
+
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         context=this;
-        button = (Button) findViewById(R.id.post);
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context,PostImageActivity.class);
-                startActivity(intent);
-            }
-        });
+//        button = (Button) findViewById(R.id.post);
+//
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(context,PostImageActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         try {
             PackageInfo info = getPackageManager().getPackageInfo(

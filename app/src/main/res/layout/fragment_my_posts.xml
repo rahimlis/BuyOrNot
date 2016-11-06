@@ -8,6 +8,7 @@
        android:id="@+id/recycler_friends_posts"
        android:layout_width="match_parent"
        android:visibility="invisible"
+       android:layout_margin="10dp"
        android:layout_height="wrap_content">
    </android.support.v7.widget.RecyclerView>
 

@@ -1,24 +1,25 @@
 package io.hacksters.buyornot.fragments;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cloudinary.Cloudinary;
@@ -47,10 +48,16 @@ import io.hacksters.buyornot.R;
 import io.hacksters.buyornot.utils.BitmapUtils;
 import io.hacksters.buyornot.utils.UrlBuilder;
 
+import static android.app.Activity.RESULT_OK;
+
 public class UploadImageFragment extends Fragment {
-    private View view;
-    private Context context;
     private String filePathString;
+    private final static int REQUEST_IMAGE_CAPTURE = 1982;
+    private final static int PICK_IMAGE_REQUEST = 1983;
+    private ImageView imagePreview;
+    private Bitmap bitmap;
+    private TextView cancelText, uploadText;
+    private ImageView addImage;
 
     public UploadImageFragment() {
         // Required empty public constructor
@@ -63,49 +70,31 @@ public class UploadImageFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        context = getActivity();
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view= inflater.inflate(R.layout.fragment_post_image, container, false);
-        imagePreview = (ImageView) view.findViewById(R.id.activity_post_image_preview);
-        ImageView fromCamera = (ImageView) view.findViewById(R.id.activity_post_image_choose);
-        deleteImage = (ImageView) view.findViewById(R.id.activity_post_image_delet);
-        deleteImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                imagePreview.setImageBitmap(null);
-            }
-        });
-        fromCamera.setOnClickListener(new View.OnClickListener() {
+        View view = inflater.inflate(R.layout.fragment_post_image, container, false);
+
+        addImage = (ImageView) view.findViewById(R.id.imageview_upload_image);
+        addImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 selectImage();
             }
         });
-        ImageView uploadImage = (ImageView) view.findViewById(R.id.activity_post_image_send);
-        uploadImage.setOnClickListener(new View.OnClickListener() {
+        imagePreview = (ImageView) view.findViewById(R.id.activity_post_image_preview);
+        cancelText = (TextView) view.findViewById(R.id.textview_post_cancel);
+        cancelText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UploadImageTask task = new UploadImageTask();
-                task.execute(filePathString);
+                imagePreview.setImageBitmap(null);
+                addImage.setVisibility(View.VISIBLE);
             }
         });
+
+        uploadText = (TextView) view.findViewById(R.id.textview_post_upload);
         return view;
     }
-
-    private final static int REQUEST_IMAGE_CAPTURE = 1982;
-    private final static int PICK_IMAGE_REQUEST = 1983;
-    private ImageView imagePreview;
-    private Uri filePath;
-    private String imageString;
-    private Bitmap bitmap;
-    private ImageView deleteImage;
 
 
     private void selectImage() {
@@ -131,119 +120,109 @@ public class UploadImageFragment extends Fragment {
     private void cameraIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            // Create the File where the photo should go
             File photoFile = null;
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
+                ex.printStackTrace();
             }
-            // Continue only if the File was successfully created
             if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(getActivity(),
-                        "io.hacksters.buyornot.provider",
-                        photoFile);
+
+                Uri photoURI;
+                if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+                    photoURI = Uri.fromFile(photoFile);
+                else
+                    photoURI = FileProvider.getUriForFile(getActivity(), "io.hacksters.buyornot.provider", photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
         }
-
     }
 
-    private void galleryIntent(){
-        Intent intent = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-
-        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(getActivity(),
-                        "io.hacksters.buyornot.provider",
-                        photoFile);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(intent,PICK_IMAGE_REQUEST);
-            }
-        }
+    private void galleryIntent() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode ==getActivity().RESULT_OK && data != null && data.getData() != null) {
-            filePath = data.getData();
-            final Uri selectedImageUri=data.getData();
-            try{
-                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImageUri);
-                System.out.println("kepro "+getRealPathFromURI(selectedImageUri));
-            }catch (IOException e){
+        if (resultCode == RESULT_OK) {
 
+            if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                loadImageIntoView(imagePreview, filePathString);
+                uploadText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (filePathString != null) {
+                            UploadImageTask task = new UploadImageTask(REQUEST_IMAGE_CAPTURE, null);
+                            task.execute(filePathString);
+                        }
+                    }
+                });
+
+            } else if (requestCode == PICK_IMAGE_REQUEST) {
+                Uri selectedImage = data.getData();
+                InputStream imageStream = null;
+                try {
+                    imageStream = getActivity().getContentResolver().openInputStream(selectedImage);
+                    final Bitmap yourSelectedImage = BitmapFactory.decodeStream(imageStream);
+                    loadImageIntoView(imagePreview, yourSelectedImage);
+                    addImage.setVisibility(View.INVISIBLE);
+                    uploadText.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (filePathString != null) {
+                                UploadImageTask task = new UploadImageTask(PICK_IMAGE_REQUEST, yourSelectedImage);
+                                task.execute(filePathString);
+                            }
+                        }
+                    });
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
-            imagePreview.setImageBitmap(bitmap);
+        }
 
-        }if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == getActivity().RESULT_OK) {
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.parse(filePathString));
-                imagePreview.setImageBitmap(bitmap);
-            }catch (IOException e){}
-/*
-            Uri tempUri = getImageUri(getActivity(), imageBitmap);
+    }
 
-            filePathString=getRealPathFromURI(tempUri);
-*/
+    private void loadImageIntoView(ImageView imageView, String path) {
+        try {
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.parse(path));
+            bitmap = BitmapUtils.getResizedBitmap(bitmap, 320);
+            if (bitmap != null)
+                imageView.setImageBitmap(bitmap);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    public String getRealPathFromURI(Uri uri) {
-        String[] projection = { MediaStore.Images.Media.DATA };
-        @SuppressWarnings("deprecation")
-        Cursor cursor = getActivity().managedQuery(uri, projection, null, null, null);
-        int column_index = cursor
-                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
+    private void loadImageIntoView(ImageView imageView, Bitmap bitmap) {
+        bitmap = BitmapUtils.getResizedBitmap(bitmap, 640);
+        if (bitmap != null)
+            imageView.setImageBitmap(bitmap);
     }
 
     private File createImageFile() throws IOException {
-        // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "BUY_OR_NOT_" + timeStamp + "_";
         File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",         /* suffix */
                 storageDir      /* directory */
         );
-
-        // Save a file: path for use with ACTION_VIEW intents
+        {
+            Log.d("UploadImageFragment", "result of mkdris" + image.mkdirs());
+        }
         filePathString = "file:" + image.getAbsolutePath();
+        Log.d("UploadImageFragment", filePathString);
         return image;
     }
- /*   public Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
-    }
-    public String getRealPathFromURI(Uri uri)
-    {
-        try
-        {
-            Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
-            cursor.moveToFirst();
-            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-            return cursor.getString(idx);
-        }
-        catch (Exception e)
-        {
-            return uri.getPath();
-        }
-    }
-*/
+
     private void insertImageToDatabase(String imageURL, String userID) {
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(UrlBuilder.insertImageURL(imageURL, userID), new JsonHttpResponseHandler() {
@@ -266,6 +245,14 @@ public class UploadImageFragment extends Fragment {
     }
 
     class UploadImageTask extends AsyncTask<String, Void, Map> {
+        private int requestID;
+        private Bitmap bitmap;
+
+        UploadImageTask(int requestID, Bitmap bitmap) {
+            this.requestID = requestID;
+            this.bitmap = bitmap;
+        }
+
         @Override
         protected Map doInBackground(String... paths) {
             Map config = new HashMap();
@@ -273,7 +260,8 @@ public class UploadImageFragment extends Fragment {
             config.put("api_key", "554332252326459");
             config.put("api_secret", "4YtJFT-2YD7RldBXqWzOoV1Jd5k");
             try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.parse(paths[0]));
+                if (requestID == REQUEST_IMAGE_CAPTURE)
+                    bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.parse(paths[0]));
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 40, bos);
                 InputStream inputStream = new ByteArrayInputStream(bos.toByteArray());

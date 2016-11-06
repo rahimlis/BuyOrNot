@@ -4,38 +4,75 @@
     android:id="@+id/activity_welcome"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/login_background"
     tools:context="io.hacksters.buyornot.activities.LoginActivity">
 
-
-    <!-- change this-->
-    <Button
-        android:id="@+id/post"
+    <ImageView
+        android:id="@+id/imageview_logo_login"
         android:layout_width="match_parent"
-        android:layout_centerInParent="true"
-        android:layout_height="60dp"
-        android:textSize="20sp"
-        android:text="post"
-        android:layout_gravity="center_horizontal"/>
-    <!-- change this-->
+        android:layout_height="200dp"
+        android:src="@drawable/logo_wide"
+        android:layout_centerHorizontal="true"
+        />
 
-    <TextView
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/text_input_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello loosers"
-        android:textSize="25sp"
-        android:textAlignment="center"
-        android:layout_centerInParent="true"
-        android:textColor="@color/black"
-        />
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="5dp"
+       android:layout_centerInParent="true"
+       >
+
+        <EditText
+            android:id="@+id/edittext_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:hint="email"
+            android:elevation="10dp"
+            android:background="#45ffffff"
+            android:padding="12dp"
+            android:inputType="textEmailAddress" />
+    </android.support.design.widget.TextInputLayout>
+
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/text_input_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="5dp"
+        android:layout_below="@id/text_input_email"
+        >
+
+        <EditText
+            android:id="@+id/edittext_password"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:hint="password"
+            android:elevation="10dp"
+            android:background="#45ffffff"
+            android:padding="12dp"
+            android:inputType="textPassword" />
+    </android.support.design.widget.TextInputLayout>
+
+
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button"
         android:layout_width="match_parent"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_height="60dp"
-        android:textSize="20sp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp" />
+        android:textSize="25sp"
+        android:padding="10dp"
+        android:layout_marginBottom="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_gravity="center_horizontal" />
 
 </RelativeLayout>
