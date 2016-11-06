@@ -93,7 +93,6 @@ public class UploadImageFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 UploadImageTask task = new UploadImageTask();
-                System.out.println("finniso12 "+filePathString);
                 task.execute(filePathString);
             }
         });
@@ -180,6 +179,7 @@ public class UploadImageFragment extends Fragment {
             final Uri selectedImageUri=data.getData();
             try{
                 bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImageUri);
+                System.out.println("kepro "+getRealPathFromURI(selectedImageUri));
             }catch (IOException e){
 
             }
@@ -198,6 +198,15 @@ public class UploadImageFragment extends Fragment {
         }
     }
 
+    public String getRealPathFromURI(Uri uri) {
+        String[] projection = { MediaStore.Images.Media.DATA };
+        @SuppressWarnings("deprecation")
+        Cursor cursor = getActivity().managedQuery(uri, projection, null, null, null);
+        int column_index = cursor
+                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+    }
 
     private File createImageFile() throws IOException {
         // Create an image file name
@@ -285,7 +294,6 @@ public class UploadImageFragment extends Fragment {
             super.onPostExecute(map);
             if (map != null) {
                 String imageURL = (String) map.get("url");
-                System.out.println("finnico "+imageURL);
                 String userID = AccessToken.getCurrentAccessToken().getUserId();
                 insertImageToDatabase(imageURL, userID);
             }
