@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import io.hacksters.buyornot.R;
 import io.hacksters.buyornot.controllers.SectionsPagerAdapter;
 import io.hacksters.buyornot.fragments.CompareFragment;
+import io.hacksters.buyornot.fragments.MyPostListFragment;
 import io.hacksters.buyornot.fragments.UploadImageFragment;
 import io.hacksters.buyornot.fragments.PostListFragment;
 
@@ -46,8 +47,10 @@ public class MainActivity extends AppCompatActivity {
         mSectionsPagerAdapter.addFragment(PostListFragment.newInstance());
         mSectionsPagerAdapter.addFragment(CompareFragment.newInstance());
         mSectionsPagerAdapter.addFragment(UploadImageFragment.newInstance());
+        mSectionsPagerAdapter.addFragment(MyPostListFragment.newInstance());
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setOffscreenPageLimit(3);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
     }

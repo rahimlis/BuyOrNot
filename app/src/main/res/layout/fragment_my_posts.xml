@@ -1,0 +1,33 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="io.hacksters.buyornot.activities.MainActivity">
+
+   <android.support.v7.widget.RecyclerView
+       android:id="@+id/recycler_friends_posts"
+       android:layout_width="match_parent"
+       android:visibility="invisible"
+       android:layout_height="wrap_content">
+   </android.support.v7.widget.RecyclerView>
+
+    <ProgressBar
+        android:id="@+id/progress_bar_friends_posts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_centerInParent="true"
+        />
+
+    <TextView
+        android:id="@+id/textview_no_friends"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textAlignment="center"
+        android:visibility="invisible"
+        android:textSize="16sp"
+        android:text="it seems like your friends did not upload anything"
+        />
+
+</RelativeLayout>
