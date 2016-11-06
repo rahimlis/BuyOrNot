@@ -85,12 +85,16 @@ public class CompareFragment extends Fragment implements View.OnClickListener {
         ImageView addPhoto2 = (ImageView) view.findViewById(R.id.imageview_add_photo_second);
         ImageView selectFirst = (ImageView) view.findViewById(R.id.imageview_select_first);
         ImageView selectSecond = (ImageView) view.findViewById(R.id.imageview_select_second);
+        ImageView deleteFirst = (ImageView) view.findViewById(R.id.imageview_delete_first);
+        ImageView deleteSecond= (ImageView) view.findViewById(R.id.imageview_delete_second);
         background1 = (ImageView) view.findViewById(R.id.imageview_background_first);
         background2 = (ImageView) view.findViewById(R.id.imageview_background_second);
         addPhoto1.setOnClickListener(this);
         addPhoto2.setOnClickListener(this);
         selectFirst.setOnClickListener(this);
         selectSecond.setOnClickListener(this);
+        deleteFirst.setOnClickListener(this);
+        deleteSecond.setOnClickListener(this);
         String path1 = getFromSharedPrefs(IMAGE_FIRST);
         String path2 = getFromSharedPrefs(IMAGE_SECOND);
         if (path1 != null) {
@@ -148,6 +152,8 @@ public class CompareFragment extends Fragment implements View.OnClickListener {
         return image;
     }
 
+
+
     private void putInSharedPrefs(int whichImage, String path) {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
         String key = "Image" + whichImage;
@@ -169,9 +175,9 @@ public class CompareFragment extends Fragment implements View.OnClickListener {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             String path = getFromSharedPrefs(requestCode);
-
+/*
             UploadImageTask task = new UploadImageTask();
-            task.execute(path);
+            task.execute(path);*/
             if (requestCode == IMAGE_FIRST) {
                 loadImageIntoView(background1, path);
                 view.findViewById(R.id.imageview_add_photo_first).setVisibility(View.INVISIBLE);
@@ -206,9 +212,25 @@ public class CompareFragment extends Fragment implements View.OnClickListener {
             case R.id.imageview_select_second:
                 onImageSelected();
                 break;
+            case R.id.imageview_delete_first:
+                deleFirstImage();
+                break;
+            case R.id.imageview_delete_second:
+                deleteSecondImage();
         }
     }
 
+    public void deleFirstImage(){
+        background1.setImageBitmap(null);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
+        sharedPreferences.edit().remove("Image"+IMAGE_FIRST).apply();
+    }
+    public void deleteSecondImage(){
+        background2.setImageBitmap(null);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
+        sharedPreferences.edit().remove("Image"+IMAGE_SECOND).apply();
+    }
+/*
     private void insertImageToDatabase(String imageURL, String userID) {
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(UrlBuilder.insertImageURL(imageURL, userID), new JsonHttpResponseHandler() {
@@ -229,12 +251,12 @@ public class CompareFragment extends Fragment implements View.OnClickListener {
             }
         });
     }
-
+*/
     public static Fragment newInstance() {
         CompareFragment fragment = new CompareFragment();
         return fragment;
     }
-
+/*
     class UploadImageTask extends AsyncTask<String, Void, Map> {
         @Override
         protected Map doInBackground(String... paths) {
@@ -264,9 +286,11 @@ public class CompareFragment extends Fragment implements View.OnClickListener {
             super.onPostExecute(map);
             if (map != null) {
                 String imageURL = (String) map.get("url");
+                System.out.println("finnico "+imageURL);
                 String userID = AccessToken.getCurrentAccessToken().getUserId();
                 insertImageToDatabase(imageURL, userID);
             }
         }
     }
+    */
 }
